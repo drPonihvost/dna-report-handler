@@ -41,8 +41,6 @@ class DNAReport(Name):
         return {'name': self.name, 'genotypes': [genotype.to_dict() for genotype in self.genotypes]}
 
 
-
-
 a1 = Allele('Allele 1', '15')
 a2 = Allele('Allele 2', '17')
 a3 = Allele('Allele 1', '9')

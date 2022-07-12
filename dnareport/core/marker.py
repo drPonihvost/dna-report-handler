@@ -8,7 +8,7 @@ from dnareport.core.errors import LocusNameError, DataTypeError
 
 @dataclass
 class Marker(Name):
-    _alleles: List[Allele]
+    _alleles: List[Allele] = None
 
     def __post_init__(self):
         super().__post_init__()
@@ -29,11 +29,12 @@ class Marker(Name):
             raise LocusNameError
 
     @staticmethod
-    def __check_allele_list(alleles: List[Allele]) -> DataTypeError or None:
-        if not isinstance(alleles, list):
-            raise DataTypeError
-        if not all(isinstance(allele, Allele) for allele in alleles):
-            raise DataTypeError
+    def __check_allele_list(alleles: List[Allele] or None) -> DataTypeError or None:
+        if alleles is not None:
+            if not isinstance(alleles, list):
+                raise DataTypeError
+            if not all(isinstance(allele, Allele) for allele in alleles):
+                raise DataTypeError
 
     def to_dict(self):
         return {'name': self.name, 'alleles': [allele.to_dict() for allele in self.alleles]}
