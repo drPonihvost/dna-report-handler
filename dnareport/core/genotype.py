@@ -14,7 +14,7 @@ class Genotype(Name):
         super().__post_init__()
 
     @property
-    def markers(self) -> List[Marker] or None:
+    def markers(self) -> List[Marker]:
         return self._markers
 
     @staticmethod
@@ -23,14 +23,14 @@ class Genotype(Name):
             raise DataTypeError
 
     @staticmethod
-    def _check_name(name: str) -> GenotypeNameError or None:
+    def _check_name(name: str) -> Exception or None:
         if not isinstance(name, str):
             raise GenotypeNameError
 
     def __is_duplicate(self, marker: Marker) -> bool:
         return marker in self._markers
 
-    def __get_marker_by_name(self, name: str) -> Marker:
+    def __get_marker_by_name(self, name: str) -> Marker or None:
         for marker in self._markers:
             if marker.name == name:
                 return marker

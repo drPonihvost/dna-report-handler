@@ -4,7 +4,7 @@ from dnareport.core.allele import Allele
 from dnareport.core.genotype import Genotype
 from dnareport.core.marker import Marker
 from dnareport.core.project import Project
-from dnareport.core.settings import Settings
+from dnareport.settings import Settings
 
 
 class Handler:
@@ -35,14 +35,7 @@ class Handler:
         return Genotype(row[fields['Sample Name']])
 
     @classmethod
-    def __create_object(
-            cls,
-            fields: Dict,
-            data: List[str],
-            filename: str,
-            objects: Tuple or None,
-            ignore_merge_error: bool
-    ) -> Project:
+    def __create_object(cls, fields: Dict, data: List[str], filename: str, objects: Tuple or None, ignore_merge_error: bool) -> Project:
         project = Project(filename, object_list=objects)
         for row in data:
             row = cls.__line_to_array(row)
@@ -55,8 +48,7 @@ class Handler:
         return project
 
     @classmethod
-    def handle(cls, header, rest, filename: str, ignore_merge_error: bool, objects: tuple or None):
-
+    def handle(cls, header, rest, filename: str, ignore_merge_error: bool, objects: tuple or None) -> Project:
         cls.__validate_fields(cls.__line_to_array(header))
         fields = cls.__set_fields(cls.__line_to_array(header))
         return cls.__create_object(fields, rest, filename, objects, ignore_merge_error)

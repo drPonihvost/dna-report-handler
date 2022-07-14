@@ -10,13 +10,14 @@ from dnareport.core.genotype import Genotype
 class Project(Name):
     _genotypes: List[Genotype] = field(default_factory=list, init=False)
     object_list: Tuple[str] or None = None
+    __objects: Tuple[str] or None = None
 
     def __post_init__(self) -> None:
         super().__post_init__()
         self.objects = self.object_list
 
     @property
-    def genotypes(self) -> List:
+    def genotypes(self) -> List[Genotype]:
         return self._genotypes
 
     @property
@@ -29,7 +30,7 @@ class Project(Name):
         self.__objects = objects
 
     @staticmethod
-    def __check_object_list(objects: Tuple[str]) -> DataTypeError or None:
+    def __check_object_list(objects: Tuple[str]) -> Exception or None:
         if objects is not None:
             if not isinstance(objects, tuple):
                 raise DataTypeError
@@ -47,7 +48,7 @@ class Project(Name):
                 return genotype
 
     @staticmethod
-    def _check_name(name):
+    def _check_name(name: str) -> Exception or None:
         if not isinstance(name, str):
             raise ReportNameError
 

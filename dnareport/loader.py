@@ -1,7 +1,7 @@
 import os
 from typing import TextIO
 
-from dnareport.core.settings import Settings
+from dnareport.settings import Settings
 
 
 class Loader:

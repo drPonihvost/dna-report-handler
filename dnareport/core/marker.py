@@ -64,12 +64,3 @@ class Marker(Name):
 
     def to_dict(self) -> Dict:
         return {'name': self.name, 'alleles': sorted([allele.value for allele in self._alleles])}
-
-
-if __name__ == '__main__':
-    m = Marker('D3S1358', ignore_merge_error=True)
-
-    allele_list = [Allele('17'), Allele('17')]
-    m.merge(allele_list)
-
-    print(m.to_dict())
