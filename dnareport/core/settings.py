@@ -1,5 +1,5 @@
 class Settings:
-    ALLELE_COUNT = 6
+    ALLELE_COUNT = 4
     EXT = ('.txt',)
     REQUIRED_KEYS = (
         'Sample Name',
@@ -7,7 +7,5 @@ class Settings:
         'Allele 1',
         'Allele 2',
         'Allele 3',
-        'Allele 4',
-        'Allele 5',
-        'Allele 6'
+        'Allele 4'
     )

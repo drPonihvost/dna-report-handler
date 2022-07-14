@@ -1,2 +1,4 @@
 # dna-report-handler
-Report handler electrophoresis-based genotyping systems
+Report handler electrophoresis-based genotyping systems GeneMapper
+
+

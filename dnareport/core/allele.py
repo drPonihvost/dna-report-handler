@@ -1,15 +1,13 @@
 from dataclasses import dataclass
 
-from dnareport.core.base import Name
 from dnareport.core.errors import AlleleValueError, DataTypeError
 
 
 @dataclass
-class Allele(Name):
+class Allele:
     _value: str
 
-    def __post_init__(self):
-        super().__post_init__()
+    def __post_init__(self) -> None:
         self.__check_value(self._value)
 
     @property
@@ -22,21 +20,11 @@ class Allele(Name):
         self._value = value
 
     @staticmethod
-    def _check_name(name: str) -> None:
-        if not isinstance(name, str):
-            raise ValueError
-
-    @staticmethod
-    def __check_value(value):
+    def __check_value(value: str) -> Exception or None:
         if not isinstance(value, str):
             raise DataTypeError
         if len(value) > 4:
             raise AlleleValueError
 
-    def to_dict(self) -> dict:
-        return {'name': self.name, 'value': self.value}
-
-
-a1 = Allele('Allele 1', '15')
-a2 = Allele('Allele 2', '17')
-
+    def __hash__(self):
+        return hash(self._value)

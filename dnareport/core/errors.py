@@ -16,3 +16,7 @@ class ReportNameError(ValueError):
 
 class DataTypeError(TypeError):
     pass
+
+
+class MergeError(ValueError):
+    pass

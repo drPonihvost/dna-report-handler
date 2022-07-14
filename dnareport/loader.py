@@ -22,10 +22,7 @@ class Loader:
                 filename, ext = os.path.splitext(os.path.basename(file.name))
                 if ext not in Settings.EXT:
                     raise ValueError(f"Неподдерживаемое расширение {ext}")
-                return file, filename
+                header, *rest = file.read().splitlines()
+                return header, rest, filename
         except OSError:
             raise OSError('Некорректный файл')
-
-
-# report = DNAReportHandler('/home/philipp/PycharmProjects/PyPi/dna-report-handler/README.md')
-report = Loader.load_report('/home/philipp/PycharmProjects/PyPi/dna-report-handler/requirements_dev.txt')
