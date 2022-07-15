@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 
-from dnareport.core.errors import AlleleValueError, DataTypeError
+from dnareport.core.errors import AlleleValueError, AlleleDataTypeError
 
 
 @dataclass
@@ -17,9 +17,12 @@ class Allele:
     @staticmethod
     def __check_value(value: str) -> Exception or None:
         if not isinstance(value, str):
-            raise DataTypeError
+            raise AlleleDataTypeError(value)
         if len(value) > 4:
-            raise AlleleValueError
+            raise AlleleValueError(value)
 
     def __hash__(self):
         return hash(self._value)
+
+    def __str__(self):
+        return f"class {self.__class__.__name__} value: {self._value}"

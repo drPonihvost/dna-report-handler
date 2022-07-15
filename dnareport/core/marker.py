@@ -3,7 +3,7 @@ from typing import List, Dict
 
 from dnareport.core.allele import Allele
 from dnareport.core.base import Name
-from dnareport.core.errors import LocusNameError, DataTypeError, MergeError
+from dnareport.core.errors import DataTypeError, MergeError, NameTypeError
 
 
 @dataclass
@@ -19,22 +19,19 @@ class Marker(Name):
     def alleles(self) -> List[Allele]:
         return self._alleles
 
-    @staticmethod
-    def _check_name(name: str) -> Exception or None:
+    def _check_name(self, name: str) -> Exception or None:
         if not isinstance(name, str):
-            raise LocusNameError
+            raise NameTypeError(name=name, class_name=self.__class__.__name__)
 
     @staticmethod
     def __check_allele(allele: Allele) -> Exception or None:
         if not isinstance(allele, Allele):
-            raise DataTypeError
+            raise DataTypeError()
 
-    @staticmethod
-    def __check_allele_list(alleles: List[Allele] or List) -> Exception or None:
+    def __check_allele_list(self, alleles: List[Allele] or List) -> Exception or None:
         if not isinstance(alleles, list):
             raise DataTypeError
-        if not all(isinstance(allele, Allele) for allele in alleles):
-            raise DataTypeError
+        [self.__check_allele(allele) for allele in alleles]
 
     @staticmethod
     def __check_ignore_error(param: bool) -> Exception or None:
@@ -64,3 +61,6 @@ class Marker(Name):
 
     def to_dict(self) -> Dict:
         return {'name': self.name, 'alleles': sorted([allele.value for allele in self._alleles])}
+
+
+Marker(123)

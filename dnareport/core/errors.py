@@ -1,9 +1,23 @@
-class AlleleValueError(Exception):
+from typing import Any
+
+
+class DataTypeError(Exception):
     pass
 
 
-class LocusNameError(ValueError):
-    pass
+class AlleleDataTypeError(DataTypeError):
+    def __init__(self, value: Any) -> None:
+        self.value = value
+        super().__init__(
+            f"Incorrect value ({self.value}) type class Allele, must be str,"
+            f" not {type(value).__name__}"
+        )
+
+
+class AlleleValueError(ValueError):
+    def __init__(self, value: Any) -> None:
+        self.value = value
+        super().__init__(f"Incorrect value -> {self.value}")
 
 
 class GenotypeNameError(ValueError):
@@ -12,15 +26,6 @@ class GenotypeNameError(ValueError):
 
 class ReportNameError(ValueError):
     pass
-
-
-class DataTypeError(Exception):
-    def __init__(self, message, value):
-        super().__init__(message)
-        self.value = value
-
-    def __str__(self):
-        return
 
 
 class MergeError(ValueError):
