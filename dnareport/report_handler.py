@@ -7,3 +7,5 @@ class DNAReportHandler:
         header, rest, filename = Loader.load_report(path)
         self.report = Handler.handle(header, rest, filename, ignore_merge_error, objects)
 
+
+

@@ -2,7 +2,7 @@ from dataclasses import dataclass, field
 from typing import List, Dict
 
 from dnareport.core.base import Name
-from dnareport.core.errors import GenotypeNameError, DataTypeError
+from dnareport.core.errors import MarkerDataTypeError
 from dnareport.core.marker import Marker
 
 
@@ -20,12 +20,7 @@ class Genotype(Name):
     @staticmethod
     def __check_marker(marker: Marker) -> Exception or None:
         if not isinstance(marker, Marker):
-            raise DataTypeError
-
-    @staticmethod
-    def _check_name(name: str) -> Exception or None:
-        if not isinstance(name, str):
-            raise GenotypeNameError
+            raise MarkerDataTypeError(marker)
 
     def __is_duplicate(self, marker: Marker) -> bool:
         return marker in self._markers
@@ -43,6 +38,9 @@ class Genotype(Name):
                 current_marker.merge(marker.alleles)
                 return
         self.markers.append(marker)
+
+    def __getitem__(self, key):
+        return self.__get_marker_by_name(str(key))
 
     def to_dict(self) -> Dict:
         return {'name': self.name, 'markers': [marker.to_dict() for marker in self._markers]}

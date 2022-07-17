@@ -2,7 +2,7 @@ from dataclasses import dataclass, field
 from typing import List, Tuple, Dict
 
 from dnareport.core.base import Name
-from dnareport.core.errors import ReportNameError, DataTypeError
+from dnareport.core.errors import ObjectListTypeError, GenotypeTypeError
 from dnareport.core.genotype import Genotype
 
 
@@ -33,24 +33,19 @@ class Project(Name):
     def __check_object_list(objects: Tuple[str]) -> Exception or None:
         if objects is not None:
             if not isinstance(objects, tuple):
-                raise DataTypeError
+                raise ObjectListTypeError(objects)
             if not all(isinstance(obj, str) for obj in objects):
-                raise DataTypeError
+                raise ObjectListTypeError(objects)
 
     @staticmethod
     def __check_genotype(genotype) -> Exception or None:
         if not isinstance(genotype, Genotype):
-            raise DataTypeError
+            raise GenotypeTypeError(genotype)
 
     def __get_by_name(self, name: str) -> Genotype:
         for genotype in self._genotypes:
             if genotype.name == name:
                 return genotype
-
-    @staticmethod
-    def _check_name(name: str) -> Exception or None:
-        if not isinstance(name, str):
-            raise ReportNameError
 
     def __add_genotype(self, genotype: Genotype) -> None:
         current_genotype = self.__get_by_name(genotype.name)
@@ -67,6 +62,9 @@ class Project(Name):
         self.__check_genotype(genotype)
         if self.__objects:
             self.__filter(genotype)
+
+    def __getitem__(self, key):
+        return self.__get_by_name(str(key))
 
     def to_dict(self) -> Dict:
         return {'name': self.name, 'genotypes': [genotype.to_dict() for genotype in self.genotypes]}

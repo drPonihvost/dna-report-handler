@@ -1,6 +1,7 @@
 from typing import List, Dict, Tuple
 
 from dnareport.core.allele import Allele
+from dnareport.core.errors import FileStructureError
 from dnareport.core.genotype import Genotype
 from dnareport.core.marker import Marker
 from dnareport.core.project import Project
@@ -16,7 +17,7 @@ class Handler:
     def __validate_fields(header: List[str]):
         for i in Settings.REQUIRED_KEYS:
             if header.count(i) == 0:
-                raise KeyError
+                raise FileStructureError
 
     @staticmethod
     def __set_fields(header: List[str]) -> Dict:
@@ -35,7 +36,8 @@ class Handler:
         return Genotype(row[fields['Sample Name']])
 
     @classmethod
-    def __create_object(cls, fields: Dict, data: List[str], filename: str, objects: Tuple or None, ignore_merge_error: bool) -> Project:
+    def __create_object(cls, fields: Dict, data: List[str], filename: str, objects: Tuple or None,
+                        ignore_merge_error: bool) -> Project:
         project = Project(filename, object_list=objects)
         for row in data:
             row = cls.__line_to_array(row)

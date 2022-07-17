@@ -1,6 +1,7 @@
 import os
 from typing import TextIO
 
+from dnareport.core.errors import ExtensionError, OpenFileError
 from dnareport.settings import Settings
 
 
@@ -8,7 +9,7 @@ class Loader:
     @staticmethod
     def __check_path(path):
         if not isinstance(path, str):
-            raise TypeError('Значение должно иметь тип str')
+            raise TypeError(path)
 
     @classmethod
     def load_report(cls, path: str):
@@ -21,8 +22,8 @@ class Loader:
             with open(path, 'r') as file:
                 filename, ext = os.path.splitext(os.path.basename(file.name))
                 if ext not in Settings.EXT:
-                    raise ValueError(f"Неподдерживаемое расширение {ext}")
+                    raise ExtensionError(ext)
                 header, *rest = file.read().splitlines()
                 return header, rest, filename
         except OSError:
-            raise OSError('Некорректный файл')
+            raise OpenFileError(filename)

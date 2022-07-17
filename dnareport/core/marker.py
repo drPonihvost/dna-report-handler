@@ -3,7 +3,7 @@ from typing import List, Dict
 
 from dnareport.core.allele import Allele
 from dnareport.core.base import Name
-from dnareport.core.errors import DataTypeError, MergeError, NameTypeError
+from dnareport.core.errors import MergeError, AlleleTypeError, AllelesDataTypeError, ParamError
 
 
 @dataclass
@@ -19,29 +19,25 @@ class Marker(Name):
     def alleles(self) -> List[Allele]:
         return self._alleles
 
-    def _check_name(self, name: str) -> Exception or None:
-        if not isinstance(name, str):
-            raise NameTypeError(name=name, class_name=self.__class__.__name__)
-
     @staticmethod
     def __check_allele(allele: Allele) -> Exception or None:
         if not isinstance(allele, Allele):
-            raise DataTypeError()
+            raise AlleleTypeError(allele)
 
     def __check_allele_list(self, alleles: List[Allele] or List) -> Exception or None:
         if not isinstance(alleles, list):
-            raise DataTypeError
+            raise AllelesDataTypeError(alleles)
         [self.__check_allele(allele) for allele in alleles]
 
     @staticmethod
     def __check_ignore_error(param: bool) -> Exception or None:
         if not isinstance(param, bool):
-            raise DataTypeError
+            raise ParamError(param)
 
     def __check_for_compliance(self, other: List[Allele]) -> Exception or None:
         if self._alleles and other:
             if set(self._alleles) != set(other) and not self.ignore_merge_error:
-                raise MergeError
+                raise MergeError(self.alleles, other)
 
     def __is_duplicate(self, allele: Allele) -> bool:
         return allele in self._alleles
@@ -61,6 +57,3 @@ class Marker(Name):
 
     def to_dict(self) -> Dict:
         return {'name': self.name, 'alleles': sorted([allele.value for allele in self._alleles])}
-
-
-Marker(123)

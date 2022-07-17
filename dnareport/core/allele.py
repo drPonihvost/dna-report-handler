@@ -23,6 +23,3 @@ class Allele:
 
     def __hash__(self):
         return hash(self._value)
-
-    def __str__(self):
-        return f"class {self.__class__.__name__} value: {self._value}"
