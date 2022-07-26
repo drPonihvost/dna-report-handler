@@ -16,8 +16,8 @@ class Marker(Name):
         self.__check_ignore_error(self.ignore_merge_error)
 
     @property
-    def alleles(self) -> List[Allele]:
-        return self._alleles
+    def alleles(self) -> List[str]:
+        return sorted([allele.value for allele in self._alleles])
 
     @staticmethod
     def __check_allele(allele: Allele) -> Exception or None:
@@ -56,4 +56,4 @@ class Marker(Name):
             self.__add_allele(allele)
 
     def to_dict(self) -> Dict:
-        return {'name': self.name, 'alleles': sorted([allele.value for allele in self._alleles])}
+        return {'name': self.name, 'alleles': self.alleles}

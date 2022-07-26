@@ -17,8 +17,8 @@ class Project(Name):
         self.objects = self.object_list
 
     @property
-    def genotypes(self) -> List[Genotype]:
-        return self._genotypes
+    def genotypes(self) -> List[str]:
+        return [genotype.name for genotype in self._genotypes]
 
     @property
     def objects(self) -> Tuple[str]:
@@ -62,9 +62,11 @@ class Project(Name):
         self.__check_genotype(genotype)
         if self.__objects:
             self.__filter(genotype)
+        else:
+            self.__add_genotype(genotype)
 
     def __getitem__(self, key):
         return self.__get_by_name(str(key))
 
     def to_dict(self) -> Dict:
-        return {'name': self.name, 'genotypes': [genotype.to_dict() for genotype in self.genotypes]}
+        return {'name': self.name, 'genotypes': [genotype.to_dict() for genotype in self._genotypes]}
